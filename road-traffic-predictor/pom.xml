@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.hazelcast.jet.demos</groupId>
-        <artifactId>hazelcast-jet-demos</artifactId>
-        <version>4.3</version>
+        <groupId>com.hazelcast.platform.demos</groupId>
+        <artifactId>hazelcast-platform-demos</artifactId>
+        <version>5.0</version>
     </parent>
 
     <artifactId>road-traffic-predictor</artifactId>

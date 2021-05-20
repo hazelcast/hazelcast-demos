@@ -1,5 +1,7 @@
 package com.hazelcast.jet.demo;
 
+import com.hazelcast.config.Config;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
@@ -163,8 +165,7 @@ public class FlightTelemetry {
             Job job = jet.newJob(pipeline, new JobConfig().setName("FlightTelemetry").setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE));
             job.join();
         } finally {
-            Jet.shutdownAll();
-        }
+            Hazelcast.shutdownAll();        }
     }
 
     private static JetInstance getJetInstance() {
@@ -172,7 +173,9 @@ public class FlightTelemetry {
         if (bootstrap != null && bootstrap.equals("true")) {
             return JetBootstrap.getInstance();
         }
-        return Jet.newJetInstance();
+
+//        return Jet.bootstrappedInstance().getHazelcastInstance();
+        return Jet.bootstrappedInstance();
     }
 
     /**

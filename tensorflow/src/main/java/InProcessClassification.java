@@ -71,7 +71,7 @@ public class InProcessClassification {
         }
 
         String dataPath = args[0];
-        JetInstance instance = Jet.newJetInstance();
+        JetInstance instance = Jet.bootstrappedInstance();
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(dataPath, "data");
 

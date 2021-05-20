@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.datamodel.KeyedWindowResult;
@@ -114,12 +115,12 @@ public class TrafficPredictor {
             System.exit(1);
         }
 
-        JetInstance instance = Jet.newJetInstance();
+        JetInstance instance = Jet.bootstrappedInstance();
         Pipeline pipeline = buildPipeline(sourceFile, targetDirectory);
         try {
             instance.newJob(pipeline).join();
         } finally {
-            Jet.shutdownAll();
+            Hazelcast.shutdownAll();
         }
     }
     /**

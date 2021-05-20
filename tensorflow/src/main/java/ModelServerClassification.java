@@ -120,7 +120,7 @@ public class ModelServerClassification {
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(dataPath, "data");
 
-        JetInstance instance = Jet.newJetInstance();
+        JetInstance instance = Jet.bootstrappedInstance();
         try {
             IMap<Long, String> reviewsMap = instance.getMap("reviewsMap");
             SampleReviews.populateReviewsMap(reviewsMap);
