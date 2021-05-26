@@ -123,7 +123,7 @@ public class RealTimeImageRecognition {
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(modelPath.toString(), "model");
 
-        JetInstance jet = Jet.bootstrappedInstance();
+        JetInstance jet = Hazelcast.bootstrappedInstance().getJetInstance();
         try {
             jet.newJob(pipeline, jobConfig).join();
         } finally {

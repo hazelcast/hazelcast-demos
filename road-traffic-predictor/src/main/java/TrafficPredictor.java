@@ -115,7 +115,7 @@ public class TrafficPredictor {
             System.exit(1);
         }
 
-        JetInstance instance = Jet.bootstrappedInstance();
+        JetInstance instance = Hazelcast.bootstrappedInstance().getJetInstance();
         Pipeline pipeline = buildPipeline(sourceFile, targetDirectory);
         try {
             instance.newJob(pipeline).join();

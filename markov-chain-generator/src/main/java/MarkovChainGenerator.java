@@ -84,7 +84,7 @@ public class MarkovChainGenerator {
     }
 
     public static void main(String[] args) {
-        JetInstance jet = Jet.bootstrappedInstance();
+        JetInstance jet = Hazelcast.bootstrappedInstance().getJetInstance();
         Pipeline p = buildPipeline();
 
         System.out.println("Generating model...");

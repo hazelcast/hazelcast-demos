@@ -37,7 +37,7 @@ public class BreastCancerClassification {
 
         System.setProperty("hazelcast.logging.type", "log4j");
 
-        JetInstance jet = Jet.bootstrappedInstance();
+        JetInstance jet = Hazelcast.bootstrappedInstance().getJetInstance();
 
         JobConfig jobConfig = new JobConfig();
         jobConfig.setName("h2o Breast Cancer Classification");

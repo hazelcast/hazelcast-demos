@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Int64Value;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.config.JobConfig;
@@ -120,7 +121,7 @@ public class ModelServerClassification {
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(dataPath, "data");
 
-        JetInstance instance = Jet.bootstrappedInstance();
+        JetInstance instance = Hazelcast.bootstrappedInstance().getJetInstance();
         try {
             IMap<Long, String> reviewsMap = instance.getMap("reviewsMap");
             SampleReviews.populateReviewsMap(reviewsMap);
