@@ -14,7 +14,7 @@
         <module>cryptocurrency-sentiment-analysis</module>
         <module>flight-telemetry</module>
         <module>markov-chain-generator</module>
-        <module>realtime-image-recognition</module>
+        <module>realtime-trade-monitor</module>
         <module>road-traffic-predictor</module>
         <module>tensorflow</module>
         <module>h2o-breast-cancer-classification</module>
