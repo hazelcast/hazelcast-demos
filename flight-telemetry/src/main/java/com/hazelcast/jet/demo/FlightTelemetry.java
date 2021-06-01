@@ -1,6 +1,6 @@
 package com.hazelcast.jet.demo;
 
-import com.hazelcast.jet.Jet;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
@@ -8,7 +8,6 @@ import com.hazelcast.jet.config.ProcessingGuarantee;
 import com.hazelcast.jet.datamodel.KeyedWindowResult;
 import com.hazelcast.jet.demo.Aircraft.VerticalDirection;
 import com.hazelcast.jet.demo.types.WakeTurbulanceCategory;
-import com.hazelcast.jet.impl.JetBootstrap;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sink;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -163,16 +162,16 @@ public class FlightTelemetry {
             Job job = jet.newJob(pipeline, new JobConfig().setName("FlightTelemetry").setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE));
             job.join();
         } finally {
-            Jet.shutdownAll();
-        }
+            Hazelcast.shutdownAll();        }
     }
 
     private static JetInstance getJetInstance() {
         String bootstrap = System.getProperty("bootstrap");
         if (bootstrap != null && bootstrap.equals("true")) {
-            return JetBootstrap.getInstance();
+            return Hazelcast.bootstrappedInstance().getJetInstance();
         }
-        return Jet.newJetInstance();
+
+        return Hazelcast.newHazelcastInstance().getJetInstance();
     }
 
     /**

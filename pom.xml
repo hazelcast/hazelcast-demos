@@ -4,26 +4,21 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hazelcast.jet.demos</groupId>
-    <artifactId>hazelcast-jet-demos</artifactId>
-    <version>4.3</version>
+    <groupId>com.hazelcast.demos</groupId>
+    <artifactId>hazelcast-demos</artifactId>
+    <version>5.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Hazelcast Jet Demo Applications</name>
 
     <modules>
-        <module>bitcoin-death-cross</module>
         <module>cryptocurrency-sentiment-analysis</module>
         <module>flight-telemetry</module>
-        <module>jetleopard</module>
-        <module>market-data-ingest</module>
         <module>markov-chain-generator</module>
         <module>realtime-image-recognition</module>
+        <module>realtime-trade-monitor</module>
         <module>road-traffic-predictor</module>
-        <module>train-track</module>
         <module>tensorflow</module>
         <module>h2o-breast-cancer-classification</module>
-        <module>debezium-cdc-with-kafka</module>
-        <module>debezium-cdc-without-kafka</module>
     </modules>
 
     <repositories>
@@ -49,7 +44,7 @@
 
     <properties>
         <jdk.version>1.8</jdk.version>
-        <hazelcast-jet.version>4.3</hazelcast-jet.version>
+        <hazelcast.version>5.0-SNAPSHOT</hazelcast.version>
         <maven.compiler.plugin.version>2.5.1</maven.compiler.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -80,9 +75,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.hazelcast.jet</groupId>
-            <artifactId>hazelcast-jet</artifactId>
-            <version>${hazelcast-jet.version}</version>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
     </dependencies>
 </project>

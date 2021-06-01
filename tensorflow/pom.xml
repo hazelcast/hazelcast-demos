@@ -21,9 +21,9 @@
 
     <artifactId>tensorflow</artifactId>
     <parent>
-        <groupId>com.hazelcast.jet.demos</groupId>
-        <artifactId>hazelcast-jet-demos</artifactId>
-        <version>4.3</version>
+        <groupId>com.hazelcast.demos</groupId>
+        <artifactId>hazelcast-demos</artifactId>
+        <version>5.0-SNAPSHOT</version>
     </parent>
 
     <properties>

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.config.JobConfig;
@@ -71,7 +72,7 @@ public class InProcessClassification {
         }
 
         String dataPath = args[0];
-        JetInstance instance = Jet.newJetInstance();
+        JetInstance instance = Hazelcast.bootstrappedInstance().getJetInstance();
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(dataPath, "data");
 

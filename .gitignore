@@ -59,3 +59,6 @@ beam-output*
 
 **/.factorypath
 **/spring-shell.log
+
+#jenv
+.java-version

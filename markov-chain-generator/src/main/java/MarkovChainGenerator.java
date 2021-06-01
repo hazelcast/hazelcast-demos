@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Traverser;
@@ -83,7 +84,7 @@ public class MarkovChainGenerator {
     }
 
     public static void main(String[] args) {
-        JetInstance jet = Jet.newJetInstance();
+        JetInstance jet = Hazelcast.bootstrappedInstance().getJetInstance();
         Pipeline p = buildPipeline();
 
         System.out.println("Generating model...");
@@ -91,7 +92,7 @@ public class MarkovChainGenerator {
             jet.newJob(p).join();
             printTransitionsAndMarkovChain(jet);
         } finally {
-            Jet.shutdownAll();
+            Hazelcast.shutdownAll();
         }
     }
 
