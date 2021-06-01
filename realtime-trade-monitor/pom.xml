@@ -17,7 +17,7 @@
         <module>jet-server</module>
         <module>trade-producer</module>
         <module>trade-queries</module>
-        <module>web-app</module>
+        <module>webapp</module>
     </modules>
 
     <properties>

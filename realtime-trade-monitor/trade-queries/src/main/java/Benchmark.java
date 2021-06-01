@@ -1,5 +1,4 @@
 import com.hazelcast.core.HazelcastJsonValue;
-//import com.hazelcast.jet.IMapJet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.query.impl.predicates.EqualPredicate;

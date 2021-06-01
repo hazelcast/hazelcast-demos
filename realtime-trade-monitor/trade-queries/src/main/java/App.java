@@ -17,8 +17,6 @@ public class App {
 
         String command = args[0];
 
-
-
         JetInstance jet = HazelcastClient.newHazelcastClient().getJetInstance();;
         try {
             if (command.equals("load-symbols")) {

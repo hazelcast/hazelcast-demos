@@ -1,6 +1,6 @@
 # Real-time Trade Monitor
 
-A sample dashboard which uses [Hazelcast Jet](https://github.com/hazelcast/hazelcast-jet)
+A sample dashboard which uses [Hazelcast Demos](https://github.com/hazelcast/hazelcast-demos)
 to ingest trades from Apache Kafka into a distributed map. It also performs
 an aggregation on the trades, storing the results into a separate map.
 
