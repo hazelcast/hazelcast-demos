@@ -17,6 +17,7 @@
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.datamodel.KeyedWindowResult;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.ServiceFactories;
@@ -115,7 +116,7 @@ public class TrafficPredictor {
             System.exit(1);
         }
 
-        JetInstance instance = Hazelcast.bootstrappedInstance().getJetInstance();
+        JetService instance = Hazelcast.bootstrappedInstance().getJet();
         Pipeline pipeline = buildPipeline(sourceFile, targetDirectory);
         try {
             instance.newJob(pipeline).join();

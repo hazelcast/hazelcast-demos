@@ -1,6 +1,7 @@
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hazelcast.core.EntryEvent;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastJsonValue;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.map.IMap;
@@ -14,8 +15,8 @@ public class BenchmarkLatency {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public static void benchmark(JetInstance jet) throws InterruptedException {
-        IMap<String, HazelcastJsonValue> trades = jet.getMap("trades");
+    public static void benchmark(HazelcastInstance hzInstance) throws InterruptedException {
+        IMap<String, HazelcastJsonValue> trades = hzInstance.getMap("trades");
         trades.addEntryListener(new TradeRecordsListener(), true);
         Thread.currentThread().join();
     }

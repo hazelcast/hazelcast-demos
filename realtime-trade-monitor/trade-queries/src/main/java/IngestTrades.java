@@ -1,7 +1,9 @@
 import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.HazelcastJsonValue;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.config.ProcessingGuarantee;
 import com.hazelcast.jet.kafka.KafkaSources;
@@ -18,14 +20,15 @@ public class IngestTrades {
 
     public static final String TOPIC = "trades";
 
-    public static void ingestTrades(JetInstance jet, String servers) {
+    public static void ingestTrades(HazelcastInstance hzInstance, String servers) {
         try {
             JobConfig ingestTradesConfig = new JobConfig()
                     .setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE)
                     .setName("ingestTrades")
                     .addClass(IngestTrades.class);
 
-            jet.newJobIfAbsent(createPipeline(servers), ingestTradesConfig);
+            JetService jetService = hzInstance.getJet();
+            jetService.newJobIfAbsent(createPipeline(servers), ingestTradesConfig);
         } finally {
             Hazelcast.shutdownAll();
         }

@@ -2,6 +2,9 @@ hazelcast:
   properties:
     hazelcast.logging.type: log4j
   cluster-name: jet
+  jet:
+    enabled: true
+    resource-upload-enabled: true
   network:
     join:
       multicast:

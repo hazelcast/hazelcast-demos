@@ -24,6 +24,7 @@ import boofcv.struct.image.Planar;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.datamodel.Tuple3;
 import com.hazelcast.jet.datamodel.WindowResult;
@@ -123,7 +124,7 @@ public class RealTimeImageRecognition {
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(modelPath.toString(), "model");
 
-        JetInstance jet = Hazelcast.bootstrappedInstance().getJetInstance();
+        JetService jet = Hazelcast.bootstrappedInstance().getJet();
         try {
             jet.newJob(pipeline, jobConfig).join();
         } finally {

@@ -15,8 +15,10 @@
  */
 
 import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Traverser;
 import com.hazelcast.jet.aggregate.AggregateOperation1;
 import com.hazelcast.jet.core.AppendableTraverser;
@@ -84,13 +86,14 @@ public class MarkovChainGenerator {
     }
 
     public static void main(String[] args) {
-        JetInstance jet = Hazelcast.bootstrappedInstance().getJetInstance();
+        HazelcastInstance instance = Hazelcast.bootstrappedInstance();
+        JetService jet = instance.getJet();
         Pipeline p = buildPipeline();
 
         System.out.println("Generating model...");
         try {
             jet.newJob(p).join();
-            printTransitionsAndMarkovChain(jet);
+            printTransitionsAndMarkovChain(instance);
         } finally {
             Hazelcast.shutdownAll();
         }
@@ -120,8 +123,8 @@ public class MarkovChainGenerator {
     /**
      * Prints state transitions from IMap, generates the markov chain and prints it
      */
-    private static void printTransitionsAndMarkovChain(JetInstance jet) {
-        IMap<String, SortedMap<Double, String>> transitions = jet.getMap("stateTransitions");
+    private static void printTransitionsAndMarkovChain(HazelcastInstance hzInstance) {
+        IMap<String, SortedMap<Double, String>> transitions = hzInstance.getMap("stateTransitions");
         printTransitions(transitions);
         String chain = generateMarkovChain(1000, transitions);
         System.out.println(chain);

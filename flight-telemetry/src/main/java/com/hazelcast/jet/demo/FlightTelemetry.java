@@ -1,7 +1,9 @@
 package com.hazelcast.jet.demo;
 
 import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.config.ProcessingGuarantee;
@@ -152,26 +154,27 @@ public class FlightTelemetry {
              System.exit(1);
         }
 
-        JetInstance jet = getJetInstance();
+        HazelcastInstance hzInstanse = getHzInstanse();
 
         Pipeline pipeline = buildPipeline();
-        addListener(jet.getMap(TAKE_OFF_MAP), a -> System.out.println("New aircraft taking off: " + a));
-        addListener(jet.getMap(LANDING_MAP), a -> System.out.println("New aircraft landing " + a));
+        addListener(hzInstanse.getMap(TAKE_OFF_MAP), a -> System.out.println("New aircraft taking off: " + a));
+        addListener(hzInstanse.getMap(LANDING_MAP), a -> System.out.println("New aircraft landing " + a));
 
         try {
-            Job job = jet.newJob(pipeline, new JobConfig().setName("FlightTelemetry").setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE));
+            JetService jetService = hzInstanse.getJet();
+            Job job = jetService.newJob(pipeline, new JobConfig().setName("FlightTelemetry").setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE));
             job.join();
         } finally {
             Hazelcast.shutdownAll();        }
     }
 
-    private static JetInstance getJetInstance() {
+    private static HazelcastInstance getHzInstanse() {
         String bootstrap = System.getProperty("bootstrap");
         if (bootstrap != null && bootstrap.equals("true")) {
-            return Hazelcast.bootstrappedInstance().getJetInstance();
+            return Hazelcast.bootstrappedInstance();
         }
 
-        return Hazelcast.newHazelcastInstance().getJetInstance();
+        return Hazelcast.newHazelcastInstance();
     }
 
     /**

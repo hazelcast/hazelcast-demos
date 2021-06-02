@@ -1,3 +1,4 @@
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.map.IMap;
@@ -13,11 +14,11 @@ import static java.util.stream.Collectors.toMap;
 
 public final class LoadSymbols {
 
-    public static void loadSymbols(JetInstance jet) throws IOException {
+    public static void loadSymbols(HazelcastInstance hzInstanse) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(
                 Trade.class.getResourceAsStream("/nasdaqlisted.txt"), UTF_8))
         ) {
-            IMap<String, String> symbols = jet.getMap("symbols");
+            IMap<String, String> symbols = hzInstanse.getMap("symbols");
             Map<String, String> map = reader.lines()
                                                 .skip(1)
                                                 .map(l -> {

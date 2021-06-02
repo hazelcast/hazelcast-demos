@@ -1,0 +1,5 @@
+hazelcast:
+  cluster-name: jet
+  jet:
+    enabled: true
+    resource-upload-enabled: true
