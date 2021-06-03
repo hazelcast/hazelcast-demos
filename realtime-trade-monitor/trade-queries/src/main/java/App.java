@@ -1,7 +1,5 @@
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.JetInstance;
-import com.hazelcast.jet.JetService;
 
 public class App {
 

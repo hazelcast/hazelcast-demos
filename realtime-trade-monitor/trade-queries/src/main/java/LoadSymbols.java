@@ -1,6 +1,4 @@
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
 import com.hazelcast.map.IMap;
 import java.io.BufferedReader;
 import java.io.IOException;

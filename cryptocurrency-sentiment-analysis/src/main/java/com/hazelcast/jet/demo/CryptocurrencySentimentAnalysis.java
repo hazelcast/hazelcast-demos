@@ -1,6 +1,5 @@
 package com.hazelcast.jet.demo;
 
-import com.hazelcast.core.Hazelcast;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.Traverser;
