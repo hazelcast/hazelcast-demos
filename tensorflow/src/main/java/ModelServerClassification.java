@@ -19,8 +19,8 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Int64Value;
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.datamodel.Tuple2;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -121,16 +121,18 @@ public class ModelServerClassification {
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(dataPath, "data");
 
-        JetInstance instance = Hazelcast.bootstrappedInstance().getJetInstance();
+        HazelcastInstance hzInstance = Hazelcast.bootstrappedInstance();
+        JetService jetService = hzInstance.getJet();
+
         try {
-            IMap<Long, String> reviewsMap = instance.getMap("reviewsMap");
+            IMap<Long, String> reviewsMap = hzInstance.getMap("reviewsMap");
             SampleReviews.populateReviewsMap(reviewsMap);
 
             Pipeline p = buildPipeline(serverAddress, reviewsMap);
 
-            instance.newJob(p, jobConfig).join();
+            jetService.newJob(p, jobConfig).join();
         } finally {
-            instance.shutdown();
+            hzInstance.shutdown();
         }
     }
 

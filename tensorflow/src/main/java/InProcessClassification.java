@@ -15,8 +15,8 @@
  */
 
 import com.hazelcast.core.Hazelcast;
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.datamodel.Tuple2;
 import com.hazelcast.jet.pipeline.Pipeline;
@@ -72,16 +72,17 @@ public class InProcessClassification {
         }
 
         String dataPath = args[0];
-        JetInstance instance = Hazelcast.bootstrappedInstance().getJetInstance();
+        HazelcastInstance hzInstance = Hazelcast.bootstrappedInstance();
+        JetService jetService = hzInstance.getJet();
         JobConfig jobConfig = new JobConfig();
         jobConfig.attachDirectory(dataPath, "data");
 
         try {
-            IMap<Long, String> reviewsMap = instance.getMap("reviewsMap");
+            IMap<Long, String> reviewsMap = hzInstance.getMap("reviewsMap");
             SampleReviews.populateReviewsMap(reviewsMap);
-            instance.newJob(buildPipeline(reviewsMap), jobConfig).join();
+            jetService.newJob(buildPipeline(reviewsMap), jobConfig).join();
         } finally {
-            instance.shutdown();
+            hzInstance.shutdown();
         }
     }
 

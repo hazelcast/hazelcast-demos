@@ -1,7 +1,8 @@
 import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.function.FunctionEx;
 import com.hazelcast.function.SupplierEx;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.accumulator.MutableReference;
 import com.hazelcast.jet.aggregate.AggregateOperation;
 import com.hazelcast.jet.aggregate.AggregateOperation1;
@@ -28,7 +29,7 @@ public class AggregateQuery {
 
     public static final String TOPIC = "trades";
 
-    public static void aggregateQuery(JetInstance jet, String servers) {
+    public static void aggregateQuery(HazelcastInstance hzInstance, String servers) {
         try {
             JobConfig query1config = new JobConfig()
                     .setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE)
@@ -37,7 +38,8 @@ public class AggregateQuery {
                     .addClass(Trade.class)
                     .addClass(AggregateQuery.class);
 
-            jet.newJobIfAbsent(createPipeline(servers), query1config);
+            JetService jetService = hzInstance.getJet();
+            jetService.newJobIfAbsent(createPipeline(servers), query1config);
 
         } finally {
             Hazelcast.shutdownAll();

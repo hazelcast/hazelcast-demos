@@ -2,8 +2,7 @@ package com.hazelcast.jet.demo;
 
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.function.FunctionEx;
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.Job;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.demo.model.BreastCancerDiagnostic;
@@ -37,7 +36,7 @@ public class BreastCancerClassification {
 
         System.setProperty("hazelcast.logging.type", "log4j");
 
-        JetInstance jet = Hazelcast.bootstrappedInstance().getJetInstance();
+        JetService jet = Hazelcast.bootstrappedInstance().getJet();
 
         JobConfig jobConfig = new JobConfig();
         jobConfig.setName("h2o Breast Cancer Classification");

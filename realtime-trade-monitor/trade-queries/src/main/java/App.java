@@ -1,5 +1,5 @@
 import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.core.HazelcastInstance;
 
 public class App {
 
@@ -17,21 +17,21 @@ public class App {
 
         String command = args[0];
 
-        JetInstance jet = HazelcastClient.newHazelcastClient().getJetInstance();;
+        HazelcastInstance hzInstance = HazelcastClient.newHazelcastClient();;
         try {
             if (command.equals("load-symbols")) {
-                LoadSymbols.loadSymbols(jet);
+                LoadSymbols.loadSymbols(hzInstance);
             } else if (command.equals("ingest-trades")) {
-                IngestTrades.ingestTrades(jet, args[1]);
+                IngestTrades.ingestTrades(hzInstance, args[1]);
             } else if (command.equals("aggregate-query")) {
-                AggregateQuery.aggregateQuery(jet, args[1]);
+                AggregateQuery.aggregateQuery(hzInstance, args[1]);
             } else if (command.equals("benchmark-index")) {
-                Benchmark.benchmark(jet);
+                Benchmark.benchmark(hzInstance);
             } else if (command.equals("benchmark-latency")) {
-                BenchmarkLatency.benchmark(jet);
+                BenchmarkLatency.benchmark(hzInstance);
             }
         } finally {
-            jet.shutdown();
+            hzInstance.shutdown();
         }
     }
 }
