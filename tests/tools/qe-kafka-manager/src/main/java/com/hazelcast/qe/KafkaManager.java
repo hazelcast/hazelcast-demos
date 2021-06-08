@@ -25,8 +25,8 @@ public class KafkaManager {
     public static void main(String[] args) throws IOException {
         KafkaManager manager = new KafkaManager();
 
-        if(args.length>0)
-            manager.runClusterCreateTopic(args[0]);
+        if(System.getenv().containsKey("kafkaTopic"))
+            manager.runClusterCreateTopic(System.getProperty("kafkaTopic"));
         else
             manager.runCluster();
 

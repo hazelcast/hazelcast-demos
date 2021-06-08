@@ -30,7 +30,7 @@ public class Runner {
         }
 
         System.out.println("************ Verification of map "+mapName+" under "+clusterName+" cluster ************");
-        System.out.println("************ Tes parameters: test type: "+observeOperation+" timeout: "+timeout+" ms, number of events: "+eventsNumber);
+        System.out.println("************ Test parameters: test type: "+observeOperation+" timeout: "+timeout+" ms, number of events: "+eventsNumber);
 
         Observer observer = new Observer(mapName,
                 observeOperation,

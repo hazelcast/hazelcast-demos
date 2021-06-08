@@ -7,6 +7,8 @@ function TEST_all() {
   TEST_markov-chain-generator $demo_root
   TEST_road-traffic-predictor $demo_root
   TEST_tensorflow $demo_root
+  TEST_realtime-trade-monitor $demo_root
+  TEST_flight-telemetry $demo_root
 }
 
 function TEST_flight-telemetry() {
@@ -16,11 +18,14 @@ function TEST_flight-telemetry() {
 
   echo "********** Start flight-telemetry project with 200 sec timeout **********"
   cd $demo_root/flight-telemetry
-  timeout 200 mvn exec:java -U -B -DskipTests=true | tee ${log_file}&
+  make up
+  timeout 100 mvn exec:java -U -B -DskipTests=true | tee ${log_file}&
 
   echo "********** Launch data-observer to make sure landingMap is being updated by job **********"
   cd $demo_root/tests/tools/qe-data-observer
-  timeout 200 mvn exec:java -DmapName=landingMap -DclusterName=FlightTelemetry -DobserveOperation=update
+  timeout 100 mvn exec:java -DmapName=landingMap -DclusterName=FlightTelemetry -DobserveOperation=update -DobserveTimeout=100
+
+  make down
 
   echo "********** END TEST: flight-telemetry **********"
 }
@@ -85,6 +90,45 @@ function TEST_road-traffic-predictor() {
 
   echo "********** END TEST: road-traffic-predictor **********"
 
+}
+
+function TEST_realtime-trade-monitor() {
+  echo "********** START TEST: realtime-trade-monitor **********"
+
+  local timeout=200
+  local pause=20
+  local demo_root=$1
+  local log_file=realtime-trade-monitor-log.txt
+
+  echo "---------- realtime-trade-monitor: preparing env - starting kafka service and creating \"trades\" topic"
+  cd $demo_root/tests/tools/qe-kafka-manager
+  timeout $timeout mvn exec:java -DkafkaTopic=trades&
+  sleep $pause
+
+  echo "---------- realtime-trade-monitor: preparing env - starting trades producer"
+  cd $demo_root/realtime-trade-monitor
+  timeout $timeout java -jar trade-producer/target/trade-producer-5.0-SNAPSHOT.jar 127.0.0.1:9092 5 | tee ${log_file}&
+  sleep $pause
+
+
+  echo "---------- realtime-trade-monitor: starting jet server"
+  timeout $timeout java -jar jet-server/target/jet-server-5.0-SNAPSHOT.jar | tee ${log_file}&
+  sleep $pause
+
+
+  echo "---------- realtime-trade-monitor: starting jet jobs to ingest and aggregate trades"
+  java -jar trade-queries/target/trade-queries-5.0-SNAPSHOT.jar load-symbols | tee ${log_file}
+  sleep $pause
+  java -jar trade-queries/target/trade-queries-5.0-SNAPSHOT.jar ingest-trades 127.0.0.1:9092 | tee ${log_file}
+  sleep $pause
+  java -jar trade-queries/target/trade-queries-5.0-SNAPSHOT.jar aggregate-query 127.0.0.1:9092 | tee ${log_file}
+  sleep $pause
+
+  echo "********** Launch data-observer to make sure landingMap is being updated by job **********"
+  cd $demo_root/tests/tools/qe-data-observer
+  timeout $timeout mvn exec:java -DmapName=query1_Results -DobserveOperation=update
+
+  echo "********** END TEST: realtime-trade-monitor **********"
 }
 
 function TEST_tensorflow() {
