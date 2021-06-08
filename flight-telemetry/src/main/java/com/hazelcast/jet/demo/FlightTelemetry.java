@@ -153,14 +153,14 @@ public class FlightTelemetry {
              System.exit(1);
         }
 
-        HazelcastInstance hzInstanse = getHzInstanse();
+        HazelcastInstance hzInstance = getHzInstanse();
 
         Pipeline pipeline = buildPipeline();
-        addListener(hzInstanse.getMap(TAKE_OFF_MAP), a -> System.out.println("New aircraft taking off: " + a));
-        addListener(hzInstanse.getMap(LANDING_MAP), a -> System.out.println("New aircraft landing " + a));
+        addListener(hzInstance.getMap(TAKE_OFF_MAP), a -> System.out.println("New aircraft taking off: " + a));
+        addListener(hzInstance.getMap(LANDING_MAP), a -> System.out.println("New aircraft landing " + a));
 
         try {
-            JetService jetService = hzInstanse.getJet();
+            JetService jetService = hzInstance.getJet();
             Job job = jetService.newJob(pipeline, new JobConfig().setName("FlightTelemetry").setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE));
             job.join();
         } finally {
