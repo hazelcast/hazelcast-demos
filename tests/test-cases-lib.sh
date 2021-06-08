@@ -10,7 +10,19 @@ function TEST_all() {
 }
 
 function TEST_flight-telemetry() {
-  echo "********** TEST NOT IMPLEMENTED YET: flight-telemetry **********"
+  echo "********** START TEST: flight-telemetry **********"
+  local demo_root=$1
+  local log_file=flight-telemetry.txt
+
+  echo "********** Start flight-telemetry project with 200 sec timeout **********"
+  cd $demo_root/flight-telemetry
+  timeout 200 mvn exec:java -U -B -DskipTests=true | tee ${log_file}&
+
+  echo "********** Launch data-observer to make sure landingMap is being updated by job **********"
+  cd $demo_root/tests/tools/qe-data-observer
+  timeout 200 mvn exec:java -DmapName=landingMap -DclusterName=FlightTelemetry -DobserveOperation=update
+
+  echo "********** END TEST: flight-telemetry **********"
 }
 
 function TEST_h2o-breast-cancer-classification() {
