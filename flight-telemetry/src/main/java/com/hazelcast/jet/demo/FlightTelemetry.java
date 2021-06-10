@@ -153,7 +153,7 @@ public class FlightTelemetry {
              System.exit(1);
         }
 
-        HazelcastInstance hzInstance = getHzInstanse();
+        HazelcastInstance hzInstance = getHzInstance();
 
         Pipeline pipeline = buildPipeline();
         addListener(hzInstance.getMap(TAKE_OFF_MAP), a -> System.out.println("New aircraft taking off: " + a));
@@ -167,7 +167,7 @@ public class FlightTelemetry {
             Hazelcast.shutdownAll();        }
     }
 
-    private static HazelcastInstance getHzInstanse() {
+    private static HazelcastInstance getHzInstance() {
         String bootstrap = System.getProperty("bootstrap");
         if (bootstrap != null && bootstrap.equals("true")) {
             return Hazelcast.bootstrappedInstance();

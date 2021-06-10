@@ -15,18 +15,33 @@ function TEST_flight-telemetry() {
   echo "********** START TEST: flight-telemetry **********"
   local demo_root=$1
   local log_file=flight-telemetry.txt
+  local pause=20
 
   echo "********** Start flight-telemetry project with 200 sec timeout **********"
   cd $demo_root/flight-telemetry
   make up
-  timeout 100 mvn exec:java -U -B -DskipTests=true | tee ${log_file}&
+  sleep $pause
+  timeout 200 mvn exec:java -U -B | tee ${log_file}&
+  local FLIGHT_TM_PID=$!
+  sleep $pause
 
   echo "********** Launch data-observer to make sure landingMap is being updated by job **********"
-  cd $demo_root/tests/tools/qe-data-observer
-  timeout 100 mvn exec:java -DmapName=landingMap -DclusterName=FlightTelemetry -DobserveOperation=update -DobserveTimeout=100
+  cd $demo_root/tests/tools/qe-data-observer/target
+  java -jar qe-data-observer-5.0-SNAPSHOT-jar-with-dependencies.jar FlightTelemetry landingMap
+  local TEST_RESULT=$?
 
+  #  cleaning up the environment - killing all launched processes
+  kill -KILL $FLIGHT_TM_PID
   make down
 
+  if [ "$TEST_RESULT" == "1" ]
+  then
+     echo "**********flight-telemetry: Test failed! **********"
+     #exiting if failed to be consistent with other test cases, this will be refactored in the future
+     exit 1
+  fi
+
+  echo "**********flight-telemetry: Test passed **********"
   echo "********** END TEST: flight-telemetry **********"
 }
 
@@ -95,6 +110,7 @@ function TEST_road-traffic-predictor() {
 function TEST_realtime-trade-monitor() {
   echo "********** START TEST: realtime-trade-monitor **********"
 
+  local hzVersion=5.0-SNAPSHOT
   local timeout=200
   local pause=20
   local demo_root=$1
@@ -103,31 +119,46 @@ function TEST_realtime-trade-monitor() {
   echo "---------- realtime-trade-monitor: preparing env - starting kafka service and creating \"trades\" topic"
   cd $demo_root/tests/tools/qe-kafka-manager
   timeout $timeout mvn exec:java -DkafkaTopic=trades&
+  local KAFKA_PID=$!
   sleep $pause
 
   echo "---------- realtime-trade-monitor: preparing env - starting trades producer"
   cd $demo_root/realtime-trade-monitor
-  timeout $timeout java -jar trade-producer/target/trade-producer-5.0-SNAPSHOT.jar 127.0.0.1:9092 5 | tee ${log_file}&
+  timeout $timeout java -jar trade-producer/target/trade-producer-${hzVersion}.jar 127.0.0.1:9092 5 | tee ${log_file}&
+  local PRODUCER_PID=$!
   sleep $pause
-
 
   echo "---------- realtime-trade-monitor: starting jet server"
-  timeout $timeout java -jar jet-server/target/jet-server-5.0-SNAPSHOT.jar | tee ${log_file}&
+  timeout $timeout java -jar jet-server/target/jet-server-${hzVersion}.jar | tee ${log_file}&
+  local JET_PID=$!
   sleep $pause
-
 
   echo "---------- realtime-trade-monitor: starting jet jobs to ingest and aggregate trades"
-  java -jar trade-queries/target/trade-queries-5.0-SNAPSHOT.jar load-symbols | tee ${log_file}
+  java -jar trade-queries/target/trade-queries-${hzVersion}.jar load-symbols | tee ${log_file}
   sleep $pause
-  java -jar trade-queries/target/trade-queries-5.0-SNAPSHOT.jar ingest-trades 127.0.0.1:9092 | tee ${log_file}
+  java -jar trade-queries/target/trade-queries-${hzVersion}.jar ingest-trades 127.0.0.1:9092 | tee ${log_file}
   sleep $pause
-  java -jar trade-queries/target/trade-queries-5.0-SNAPSHOT.jar aggregate-query 127.0.0.1:9092 | tee ${log_file}
+  java -jar trade-queries/target/trade-queries-${hzVersion}.jar aggregate-query 127.0.0.1:9092 | tee ${log_file}
   sleep $pause
 
   echo "********** Launch data-observer to make sure landingMap is being updated by job **********"
-  cd $demo_root/tests/tools/qe-data-observer
-  timeout $timeout mvn exec:java -DmapName=query1_Results -DobserveOperation=update
+  cd $demo_root/tests/tools/qe-data-observer/target || exit
+  java -jar qe-data-observer-5.0-SNAPSHOT-jar-with-dependencies.jar jet query1_Results
+  local TEST_RESULT=$?
 
+  #  cleaning up the environment - killing all launched processes
+  kill -KILL $KAFKA_PID
+  kill -KILL $PRODUCER_PID
+  kill -KILL $JET_PID
+
+  if [ "$TEST_RESULT" == "1" ]
+  then
+     echo "**********realtime-trade-monitor: Test failed! **********"
+     #exiting if failed to be consistent with other test cases, this will be refactored in the future
+     exit 1
+  fi
+
+  echo "**********realtime-trade-monitor: Test passed **********"
   echo "********** END TEST: realtime-trade-monitor **********"
 }
 
