@@ -9,7 +9,7 @@ import com.hazelcast.map.IMap;
 
 public class TestMapUpdate {
     public static void main(String[] args) throws Exception {
-        if(args.length!=2){
+        if (args.length != 2) {
             System.out.println("Usage: java -jar qe-data-observer-5.0-SNAPSHOT-jar-with-dependencies.jar CLUSTER_NAME  MAP_NAME");
             System.exit(1);
         }
@@ -18,7 +18,7 @@ public class TestMapUpdate {
         String clusterName = args[0];
         String mapName = args[1];
 
-        System.out.println(">>>>>>>>> Verifying updates of "+mapName+" map in "+clusterName+" cluster <<<<<<<<");
+        System.out.println(">>>>>>>>> Verifying updates of " + mapName + " map in " + clusterName + " cluster <<<<<<<<");
 
         ClientConfig clientConfig = new ClientConfig();
         clientConfig.setClusterName(clusterName);
@@ -27,23 +27,27 @@ public class TestMapUpdate {
         connectionRetryConfig.setClusterConnectTimeoutMillis(20000);
 
         HazelcastInstance hzInstance = HazelcastClient.newHazelcastClient(clientConfig);
-        IMap<Object, Object> observableMap = hzInstance.getMap(mapName);
-        int initialSize = observableMap.size();
 
-        int i = 0;
-        while (i < 20){
-            Thread.sleep(10000);
-            if(observableMap.size() > initialSize){
-                testResult = true;
-                break;
+        try {
+            IMap<Object, Object> observableMap = hzInstance.getMap(mapName);
+            int initialSize = observableMap.size();
+
+            int i = 0;
+            while (i < 20) {
+                Thread.sleep(10000);
+                if (observableMap.size() > initialSize) {
+                    testResult = true;
+                    break;
+                }
+                i++;
             }
-            i++;
+        } finally {
+            hzInstance.shutdown();
         }
-        hzInstance.shutdown();
 
-        if(testResult){
+        if (testResult) {
             System.out.println(">>>>>>>>> Test passed <<<<<<<<");
-        }else {
+        } else {
             System.out.println(">>>>>>>>> Test failed wait for updates after 200 second <<<<<<<<");
             System.exit(1);
         }

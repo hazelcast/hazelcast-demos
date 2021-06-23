@@ -3,6 +3,7 @@
 . demo-util-lib.sh
 . test-cases-lib.sh
 
+export HZ_VERSION=5.0-SNAPSHOT
 export TEST_CASES=all
 export PACK_JARS=true
 export PRINT_USAGE=false
@@ -38,10 +39,10 @@ fi
 
 #running tests for specified project (each test is identified by project name)
 #test case is initiated by calling TEST_${project_name} function
-#each test case function takes $DEMO_ROOT as a parameter
+#each test case function takes $DEMO_ROOT as a 1-st parameter and (optionally) $HZ_VERSION as a second one
 IFS=',' read -ra TCS <<<"$TEST_CASES"
 for project_name in "${TCS[@]}"; do
   #  calling test case functions from test-cases-lib.sh
-  TEST_${project_name} $DEMO_ROOT
+  TEST_${project_name} $DEMO_ROOT $HZ_VERSION
 
 done
