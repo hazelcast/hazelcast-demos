@@ -148,11 +148,11 @@ function TEST_realtime-trade-monitor() {
 
   #  cleaning up the environment - killing all launched processes
   echo "********** Killing Kafka processes **********"
-  kill $(ps aux | grep '[k]afka' | awk '{print $2}')
+  kill $(ps aux | grep '[e]xec:java -DkafkaTopic=trades' | awk '{print $2}')
   echo "********** Killing Producer processes **********"
-  kill $(ps aux | grep '[t]rade-producer' | awk '{print $2}')
+  kill $(ps aux | grep '[t]rade-producer/target/trade-producer-' | awk '{print $2}')
   echo "********** Killing Jet Server processes **********"
-  kill $(ps aux | grep '[j]et-server' | awk '{print $2}')
+  kill $(ps aux | grep '[j]et-server/target/jet-server-' | awk '{print $2}')
 
   if [ "$TEST_RESULT" != "0" ]
   then
