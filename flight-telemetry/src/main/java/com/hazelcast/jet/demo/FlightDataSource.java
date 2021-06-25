@@ -31,11 +31,12 @@ import static com.hazelcast.internal.util.StringUtil.isNullOrEmpty;
  */
 public class FlightDataSource {
 
+    private static final String API_KEY_NAME = "telemetry.api.key";
     /**
      * See <a href="https://www.adsbexchange.com/data/">ADS-B Exchange</a> for how to
-     * obtain an API key.
+     * obtain an API key. Replace initApiKey() method call with your API key.
      */
-    protected static final String API_AUTHENTICATION_KEY = "YOUR_API_KEY_HERE";
+    protected static final String API_AUTHENTICATION_KEY = initApiKey();
 
     private final URL url;
     private final long pollIntervalMillis;
@@ -117,5 +118,12 @@ public class FlightDataSource {
                 .fillBufferFn(FlightDataSource::fillBuffer)
                 .build();
 
+    }
+
+    private static String initApiKey() {
+        if(System.getProperties().containsKey(API_KEY_NAME))
+            return System.getProperty(API_KEY_NAME);
+        else
+            return "YOUR_API_KEY_HERE";
     }
 }

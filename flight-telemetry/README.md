@@ -79,7 +79,7 @@ This demo uses data provided by [ADB-S Exchange](https://www.adsbexchange.com/).
 
 # IMPORTANT
 
-For this demo to work, you need an API key in `src/main/java/com/hazelcast/jet/demo/FlightDataSource.java`.
+For this demo to work, set an API key in `src/main/java/com/hazelcast/jet/demo/FlightDataSource.java` or pass it as "telemetry.api.key" environment variable.
 
 Follow the instructions [here](https://www.adsbexchange.com/data/) to obtain one.
 
