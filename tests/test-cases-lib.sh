@@ -3,19 +3,21 @@
 function TEST_all() {
   local demo_root=$1
   local hz_version=$2
+  local flight_telemetry_api_key=$3
 
   TEST_h2o-breast-cancer-classification $demo_root
   TEST_markov-chain-generator $demo_root
   TEST_road-traffic-predictor $demo_root
   TEST_tensorflow $demo_root
   TEST_realtime-trade-monitor $demo_root $hz_version
-  TEST_flight-telemetry $demo_root $hz_version
+  TEST_flight-telemetry $demo_root $hz_version flight_telemetry_api_key
 }
 
 function TEST_flight-telemetry() {
   echo "********** START TEST: flight-telemetry **********"
   local demo_root=$1
   local hzVersion=$2
+  local api_key=$3
   local log_file=flight-telemetry.txt
   local pause=20
 
@@ -23,7 +25,7 @@ function TEST_flight-telemetry() {
   cd $demo_root/flight-telemetry || exit 1
   make up
   sleep $pause
-  timeout 200 mvn exec:java -U -B | tee ${log_file}&
+  timeout 200 mvn exec:java -Dtelemetry.api.key=${api_key} -U -B | tee ${log_file}&
   sleep $pause
 
   echo "********** Launch data-observer to make sure landingMap is being updated by job **********"
