@@ -10,7 +10,7 @@ function TEST_all() {
   TEST_road-traffic-predictor $demo_root
   TEST_tensorflow $demo_root
   TEST_realtime-trade-monitor $demo_root $hz_version
-  TEST_flight-telemetry $demo_root $hz_version flight_telemetry_api_key
+  TEST_flight-telemetry $demo_root $hz_version $flight_telemetry_api_key
 }
 
 function TEST_flight-telemetry() {
