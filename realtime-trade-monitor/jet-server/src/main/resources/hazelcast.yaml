@@ -1,5 +1,5 @@
 hazelcast:
-  cluster-name: jet
+  cluster-name: dev
   jet:
     enabled: true
     resource-upload-enabled: true
@@ -28,6 +28,9 @@ hazelcast:
         - type: HASH
           attributes:
             - "symbol"
+        - type: SORTED
+          attributes:
+            - "timestamp"
     symbols:
       in-memory-format: BINARY
     query1_Results:
