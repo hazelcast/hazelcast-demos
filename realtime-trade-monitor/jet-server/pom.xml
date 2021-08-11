@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.hazelcast.demos</groupId>
         <artifactId>realtime-trade-monitor</artifactId>
-        <version>5.0-SNAPSHOT</version>
+        <version>5.0-BETA-2</version>
     </parent>
 
     <build>
@@ -56,6 +56,17 @@
         <dependency>
             <groupId>com.hazelcast.jet</groupId>
             <artifactId>hazelcast-jet-kafka</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-sql</artifactId>
+            <version>${hazelcast.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast.jet</groupId>
+            <artifactId>hazelcast-jet-csv</artifactId>
             <version>${hazelcast.version}</version>
         </dependency>
 

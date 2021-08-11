@@ -1,5 +1,5 @@
 hazelcast-client:
-  cluster-name: jet
+  cluster-name: dev
   instance-name: query-client
   network:
     cluster-members:
