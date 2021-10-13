@@ -9,6 +9,7 @@ import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
+import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -18,7 +19,7 @@ public class IngestTrades {
 
     public static final String TOPIC = "trades";
 
-    public static void ingestTrades(HazelcastInstance hzInstance, String servers) {
+    public static void ingestTrades(HazelcastInstance hzInstance, String servers) throws IOException {
         try {
             JobConfig ingestTradesConfig = new JobConfig()
                     .setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE)
@@ -32,7 +33,7 @@ public class IngestTrades {
         }
     }
 
-    private static Pipeline createPipeline(String servers) {
+    private static Pipeline createPipeline(String servers) throws IOException {
         Pipeline p = Pipeline.create();
         p.readFrom(KafkaSources.<String, String, Entry<String, HazelcastJsonValue>>kafka(kafkaSourceProps(servers),
                 record -> entry(record.key(), new HazelcastJsonValue(record.value())), TOPIC)
@@ -44,10 +45,13 @@ public class IngestTrades {
         return p;
     }
 
-    private static Properties kafkaSourceProps(String servers) {
+    private static Properties kafkaSourceProps(String servers) throws IOException {
         Properties props = new Properties();
         props.setProperty("auto.offset.reset", "earliest");
-        props.setProperty("bootstrap.servers", servers);
+        props.load(IngestTrades.class.getResourceAsStream("kafka.properties"));
+        if (!servers.isEmpty()) {
+            props.setProperty("bootstrap.servers", servers);
+        }
         props.setProperty("key.deserializer", StringDeserializer.class.getName());
         props.setProperty("value.deserializer", StringDeserializer.class.getName());
         return props;
