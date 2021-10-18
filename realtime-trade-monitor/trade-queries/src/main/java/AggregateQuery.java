@@ -13,11 +13,10 @@ import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.StreamStage;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.common.serialization.LongSerializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import com.hazelcast.jet.kafka.KafkaSources;
 
+import java.io.IOException;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -29,7 +28,7 @@ public class AggregateQuery {
 
     public static final String TOPIC = "trades";
 
-    public static void aggregateQuery(HazelcastInstance hzInstance, String servers) {
+    public static void aggregateQuery(HazelcastInstance hzInstance, String servers) throws IOException {
         try {
             JobConfig query1config = new JobConfig()
                     .setProcessingGuarantee(ProcessingGuarantee.EXACTLY_ONCE)
@@ -46,7 +45,7 @@ public class AggregateQuery {
         }
     }
 
-    private static Pipeline createPipeline(String servers) {
+    private static Pipeline createPipeline(String servers) throws IOException {
         Pipeline p = Pipeline.create();
 
         StreamStage<Trade> source =
@@ -73,20 +72,15 @@ public class AggregateQuery {
         return p;
     }
 
-    private static Properties kafkaSourceProps(String servers) {
+    private static Properties kafkaSourceProps(String servers) throws IOException {
         Properties props = new Properties();
+        props.load(AggregateQuery.class.getResourceAsStream("kafka.properties"));
+        if (!servers.isEmpty()) {
+            props.setProperty("bootstrap.servers", servers);
+        }
         props.setProperty("auto.offset.reset", "earliest");
-        props.setProperty("bootstrap.servers", servers);
         props.setProperty("key.deserializer", StringDeserializer.class.getName());
         props.setProperty("value.deserializer", TradeJsonDeserializer.class.getName());
-        return props;
-    }
-
-    private static Properties kafkaSinkProps(String servers) {
-        Properties props = new Properties();
-        props.setProperty("bootstrap.servers", servers);
-        props.setProperty("key.serializer", StringSerializer.class.getName());
-        props.setProperty("value.serializer", LongSerializer.class.getName());
         return props;
     }
 

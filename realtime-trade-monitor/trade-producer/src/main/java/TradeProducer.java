@@ -29,7 +29,7 @@ public class TradeProducer {
 
     private long emitSchedule;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         if (args.length == 0) {
             System.out.println("TradeProducer <bootstrap servers> <rate>");
             System.exit(1);
@@ -37,7 +37,10 @@ public class TradeProducer {
         String servers = args[0];
         int rate = Integer.parseInt(args[1]);
         Properties props = new Properties();
-        props.setProperty("bootstrap.servers", servers);
+        props.load(TradeProducer.class.getResourceAsStream("kafka.properties"));
+        if (!servers.isEmpty()) {
+            props.setProperty("bootstrap.servers", servers);
+        }
         props.setProperty("key.serializer", StringSerializer.class.getName());
         props.setProperty("value.serializer", StringSerializer.class.getName());
 

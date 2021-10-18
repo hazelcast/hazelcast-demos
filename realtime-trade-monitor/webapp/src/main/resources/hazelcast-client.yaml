@@ -1,6 +1,11 @@
 hazelcast-client:
   cluster-name: dev
   instance-name: query-client
+# For local clusters
   network:
     cluster-members:
       - 127.0.0.1
+# For Hazelcast Cloud
+# properties:
+#   hazelcast.client.cloud.url: "https://uat.hazelcast.cloud" #Optional, if env is not default
+#   hazelcast.client.cloud.discovery.token: "TOKEN"
