@@ -134,19 +134,12 @@ After:
 </dependency>   
 ```
 
-5. Prior to v3.2.0 of Hazelcast cloud you have to change the Hazelcast cluster policy manually.
-   Go to the Hazelcast Cloud Admin Panel > Clusters > Cluster Management > Open the Details of the
-   running cluster > Find the `Hazelcast Policy` section, and add the following line to the cluster policy:
-```
-permission "java.lang.RuntimePermission" "accessDeclaredMembers";
-```
-
-6. We need to have Kafka cluster that is reachable by Hazelcast Cloud nodes. For demo purposes, the easiest way is
+5. We need to have Kafka cluster that is reachable by Hazelcast Cloud nodes. For demo purposes, the easiest way is
    to create the simplest Kafka cluster at https://confluent.cloud with defaults.
 
-7. Create topic `trades` with 4 partitions. If you use https://confluent.cloud go to Topics section in the UI.
+6. Create topic `trades` with 4 partitions. If you use https://confluent.cloud go to Topics section in the UI.
 
-8. Put all kafka consumer/producer properties in `trade-producer/src/main/resources/kafka.properties` and
+7. Put all kafka consumer/producer properties in `trade-producer/src/main/resources/kafka.properties` and
    `trade-queries/src/main/resources/kafka.properties`. If you use https://confluent.cloud you can find them in
    Data Integration > Client > New Client section.
 
@@ -164,19 +157,19 @@ client.dns.lookup=use_all_dns_ips
 acks=all
 ```
 
-9. Build the project
+8. Build the project
 
 ```
 mvn package
 ```
 
-10. Start the Kafka producer
+9. Start the Kafka producer
 
 ```
 java -jar trade-producer/target/trade-producer-5.0.jar "" <trades per sec>
 ```
 
-11. Run the queries
+10. Run the queries
 
 * Load static data into map: (Stock names)
 ```
@@ -193,10 +186,10 @@ java -jar trade-queries/target/trade-queries-5.0.jar ingest-trades ""
 java -jar trade-queries/target/trade-queries-5.0.jar aggregate-query ""
 ```
 
-12. Start the front end
+11. Start the front end
 
 ```
 java -jar webapp/target/webapp-5.0.jar 
 ```
 
-13. Browse to localhost:9000 to see the dashboard.
+12. Browse to localhost:9000 to see the dashboard.
