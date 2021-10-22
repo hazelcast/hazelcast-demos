@@ -65,7 +65,8 @@ Browse to localhost:9000 to see the dashboard.
 
 ## How to run using Hazelcast Cloud:
 
-1. Create Enterprise Hazelcast cluster in https://cloud.hazelcast.com/
+1. Create an Enterprise Hazelcast cluster at https://cloud.hazelcast.com/. Please pay attention to the additional
+   cluster settings: the `Public Access` option must be turned on.
 
 2. Open client configuration window on the cluster details page and grab:
    - Cluster group name;
@@ -84,7 +85,6 @@ hazelcast-client:
   cluster-name: <CLUSTER_GROUP_NAME>
   instance-name: query-client
   properties:
-    hazelcast.client.cloud.url: "https://uat.hazelcast.cloud" #Optional, if env is not default
     hazelcast.client.cloud.discovery.token: "<CLUSTER_DISCOVERY_TOKEN>"
 ```    
 
@@ -109,7 +109,6 @@ hazelcast-client:
         trustStorePassword: "<KEYSTORE_AND_TRUSTSTORE_PASSWORD>"
         trustStoreType: jks
   properties:
-    hazelcast.client.cloud.url: "https://uat.test.hazelcast.cloud" #Optional, if env is not default
     hazelcast.client.cloud.discovery.token: "<CLUSTER_DISCOVERY_TOKEN>"
 ```
 
@@ -140,15 +139,16 @@ After:
 6. Create topic `trades` with 4 partitions. If you use https://confluent.cloud go to Topics section in the UI.
 
 7. Put all kafka consumer/producer properties in `trade-producer/src/main/resources/kafka.properties` and
-   `trade-queries/src/main/resources/kafka.properties`. If you use https://confluent.cloud you can find them in
-   Data Integration > Client > New Client section.
+   `trade-queries/src/main/resources/kafka.properties`. If you use https://confluent.cloud you can find them in:
+   `Data Integration > Client > New Client section`. The CLUSTER_API_KEY and CLUSTER_API_SECRET placeholders
+   must be replaced with the values available at: `Data integration > API Keys`.
 
 For the Confluent.cloud the config should look like this:
 ```
 # Required connection configs for Kafka producer, consumer, and admin
 bootstrap.servers=change-me.us-west-2.aws.confluent.cloud:9092
 security.protocol=SASL_SSL
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule   required username='<API_KEY>'   password='<SECRET>';
+sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule   required username='<CLUSTER_API_KEY>'   password='<CLUSTER_API_SECRET>';
 sasl.mechanism=PLAIN
 # Required for correctness in Apache Kafka clients prior to 2.6
 client.dns.lookup=use_all_dns_ips
