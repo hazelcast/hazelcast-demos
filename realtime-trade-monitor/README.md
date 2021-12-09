@@ -136,7 +136,7 @@ After:
 5. We need to have Kafka cluster that is reachable by Hazelcast Cloud nodes. For demo purposes, the easiest way is
    to create the simplest Kafka cluster at https://confluent.cloud with defaults.
 
-6. Create topic `trades` with 4 partitions. If you use https://confluent.cloud go to Topics section in the UI.
+6. Create topic `trades` with 4 partitions. If you use https://confluent.cloud, go to Topics section in the UI.
 
 7. Put all kafka consumer/producer properties in `trade-producer/src/main/resources/kafka.properties` and
    `trade-queries/src/main/resources/kafka.properties`. If you use https://confluent.cloud you can find them in:
@@ -192,4 +192,4 @@ java -jar trade-queries/target/trade-queries-5.0.jar aggregate-query ""
 java -jar webapp/target/webapp-5.0.jar 
 ```
 
-12. Browse to localhost:9000 to see the dashboard.
+12. Browse to [http://localhost:9000](http://localhost:9000) to see the dashboard
