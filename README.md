@@ -5,6 +5,7 @@ For smaller, feature specific samples see https://github.com/hazelcast/hazelcast
 
 ## Application Demos
 
+* [Real-time Trade Monitor](./realtime-trade-monitor) - Monitors financial market by running continuous queries over Kafka trade stream. Queries used to compute real-time aggregates and to do a drill down to the individual trade level. These appear on a trader screens. 
 * [Bitcoin Death Cross](./bitcoin-death-cross) - Predicting 2018's downward trend for Bitcoin.
 * [Real-time Image Recognition](./realtime-image-recognition) - Recognizes images present in the webcam video input with a model trained with CIFAR-10 dataset.
 * [Twitter Cryptocurrency Sentiment Analysis](./cryptocurrency-sentiment-analysis) - Twitter content is analyzed in real time to 
