@@ -1,1 +1,2 @@
 *.net filter=lfs diff=lfs merge=lfs -text
+realtime-image-recognition/likevgg_cifar10/model.net filter=lfs diff=lfs merge=lfs -text

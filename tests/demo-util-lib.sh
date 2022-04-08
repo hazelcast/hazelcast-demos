@@ -18,6 +18,8 @@ function print_usage_help_exit() {
   echo "  -h           print usage help and exit the scipt"
   echo "  -p  boolean  enables or disables whole project packaging. Default is true"
   echo "  -t  list     coma separated list of tests. Test case name is equal to project name. Default value is ALL"
+  echo "  -k  string   API key for flight-telemetry project. Default value is YOUR_API_KEY_HERE"
+
 
   exit
 }
